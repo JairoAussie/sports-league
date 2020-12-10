@@ -70,7 +70,13 @@ $prompt = TTY::Prompt.new
 #Print a menu with those four options, it returns the string we selected
 def select_option
     return $prompt.select("What's your option?",
-        ["Ladder", "Team's info", "Play a game!", "Exit"])
+        ["Ladder", "Team's info", "Play a game!", "Training", "Exit"])
+    
+end
+#Print a menu to select game mode
+def game_mode
+    return $prompt.select("Select game mode",
+        ["Manual", "Simulate"])
     
 end
 #Invokes the print_ladder method we defined in the League class
@@ -88,17 +94,31 @@ def show_team_info(team)
     t.show_team_full_info
 end
 #two
-def play_game
+def play_game(mode)
     puts "Welcome to a new match"
     puts "Local team"
     #invoke the select_team method to assign a team_name to local
+    #then, find the team and assign it objects
     local = select_team
+    local_team = $nbl_league.find_team(local)
     puts "away team"
     #Same with the away team
     away = select_team
+    away_team = $nbl_league.find_team(away)
     #Ask for the local team's score, force the score to be an integer
-    local_score = $prompt.ask("#{local}' score: ", convert: :integer)
-    away_score = $prompt.ask("#{away}' score: ", convert: :integer)
+
+    if mode == "manual"
+        local_score = $prompt.ask("#{local}' score: ", convert: :integer)
+        away_score = $prompt.ask("#{away}' score: ", convert: :integer)
+    else
+        #generate random numbers between 60 and 90 + stamina + mood + 5(local team)
+        local_score = rand(60..90) + local_team.mood + local_team.stamina + 5
+        away_score =  rand(60..90) + away_team.mood + away_team.stamina
+        puts "Simulating game between #{local} vs. #{away}"
+        sleep(5)
+        puts "#{local} #{local_score}"
+        puts "#{away} #{away_score}"
+    end
     #Compare the scores to know which team wins
     if local_score > away_score
         #find the teams and invoke their win/lose methods
@@ -111,6 +131,10 @@ def play_game
         $nbl_league.find_team(local).lose 
         $nbl_league.find_team(away).win
     end
+end
+def training
+    team = select_team
+    $nbl_league.find_team(team).train
 end
 puts "Welcome to the best league in the world"
 answer = ""
@@ -125,7 +149,10 @@ while answer != "Exit"
         team = select_team
         show_team_info(team)
     when "Play a game!"
-        play_game
+        mode = game_mode
+        play_game(mode)
+    when "Training"
+        training
     else
         puts "See you next time"
         next

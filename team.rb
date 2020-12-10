@@ -1,7 +1,7 @@
 class Team
     #Getters for points and name are needed in the app
     #read access is allowed with attr_reader 
-    attr_reader :points, :name
+    attr_reader :points, :name, :mood, :stamina
     def initialize(name, city, stadium, players, coach, staff)
         @name = name
         @city = city
@@ -12,16 +12,27 @@ class Team
         #default values don't need to be included as parameters in initialize
         @games = 0
         @points = 0
+        @stamina = 10
+        @mood = 10
     end
     def win
         puts "YAY!! #{@city} #{@name} won the match!"
         @games += 1
         @points += 5
+        @mood += 2
+        @stamina -= 2
     end
 
     def lose
         puts "Noooo!! #{@city} #{@name} lost the match @#*&%!"
         @games += 1
+        @mood -= 2
+        @stamina -= 2
+    end
+
+    def train
+        puts "#{@city} #{@name} trains for the next match..."
+        @stamina += 2
     end
 
     def show_team_full_info
@@ -43,8 +54,10 @@ class Team
     end
     def to_s
         general_info = "#{@name} are a team based on #{@city} and they play their games in #{@stadium}.\n"
-        league_info = "Currently, they've played #{@games} games and they have #{@points} points"
-        return general_info + league_info
+        league_info = "Currently, they've played #{@games} games and they have #{@points} points\n"
+        current_mood = "Current mood: #{@mood}\n"
+        current_stamina = "Current stamina: #{@stamina}\n"
+        return general_info + league_info + current_mood + current_stamina
     end
 end
 

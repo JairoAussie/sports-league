@@ -40,7 +40,7 @@ class League
     #iterating through the array of teams until we find a match
     def find_team(team_name)
         @teams.each do |team|
-            if t.name == team_name
+            if team.name == team_name
                 return team
             end
         end

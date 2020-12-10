@@ -1,5 +1,5 @@
 class League
-    attr_reader :teams
+    attr_reader :teams, :name
     def initialize(name, description, teams)
         @name = name
         @description = description

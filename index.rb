@@ -63,7 +63,15 @@ sydney_kings = Team.new("Kings","Sydney", "Qudos Bank Arena", players_sk, coach_
 #Create an array with the teams we've created and add it to the League object
 #the league object is a global variable as is the main object of our app and most of the methods are going to use it
 #Always justify why you use a global variable
-$nbl_league = League.new("NBL", "Australian Basketball League",[brisbane_bullets,cairns_taipans, sydney_kings, perth_wildcats])
+
+#if we receive the a parameter that will be the name of the league
+#otherwise, we'll select NBL as a default value
+if ARGV.length>0
+    league_name = ARGV[0]
+else 
+    league_name = "NBL"
+end
+$nbl_league = League.new(league_name, "Australian Basketball League",[brisbane_bullets,cairns_taipans, sydney_kings, perth_wildcats])
 #Same with prompt, is the object we're using for tty-prompt methods
 #It's going to be used in a couple of methods, no need to create more than one instance or pass it as an argument
 $prompt = TTY::Prompt.new
@@ -136,7 +144,7 @@ def training
     team = select_team
     $nbl_league.find_team(team).train
 end
-puts "Welcome to the best league in the world"
+puts "Welcome to #{$nbl_league.name}, the best league in the world"
 answer = ""
 #Loop for the menu, always shows until Exit option is selected
 while answer != "Exit"

@@ -1,6 +1,6 @@
 #!/bin/bash
 #install the necessary gems if you don't have them
-gem install bundle
+gem install bundler
 bundle install
 #clear the screen to start the app cleaned
 clear
